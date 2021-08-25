@@ -1,0 +1,106 @@
+{
+	"workerName": "tr0n",
+	"defaultCoin": "ETH",
+	"ETH": {
+		"wallets": {
+			"n4d": "0xC0b1239c2D236DCeC286B75b74e82402C512eb42",
+			"g3r": "0x86d89D61657bb4e4F503Ed7A290C5FCD2af8D387"
+		},
+		"pools": {
+			"ethermine": {
+				"url": "eu1.ethermine.org",
+				"port": "4444",
+				"scheme": "stratum+tcp",
+				"password": "x"
+			},
+			"ethermine2": {
+				"url": "eu1.ethermine.org",
+				"port": "14444",
+				"scheme": "stratum+tcp",
+				"password": "x"
+			}
+		},
+		"icon": "⧫",
+		"extraFlags": ""
+	},
+	"ETC": {
+		"wallets": {
+			"n4d": "0x32a727f79da8c4cF1c490C90205c4b3B848A3C93"
+		},
+		"pools": {
+			"ethermine": {
+				"url": "eu1-etc.ethermine.org",
+				"port": "4444",
+				"scheme": "stratum+tcp",
+				"password": "x"
+			}
+		},
+		"icon": "⧫",
+		"color": "green",
+		"extraFlags": ""
+	},
+	"RVN": {
+		"wallets": {
+			"n4d": "RMdTf5BziqtjB9jkCULMHgnzcF8X2bmWYu"
+		},
+		"pools": {
+			"flypool": {
+				"url": "stratum-ravencoin.flypool.org",
+				"port": "3333",
+				"scheme": "stratum+tcp",
+				"password": "x"
+			}
+		},
+		"icon": "🦅"
+	},
+	"BEAM": {
+		"wallets": {
+			"n4d": "2DWjfstQoaLMYYgvc4NBTTGqS1DmRSgpX5FkKzkyFFMZhmAYjyqzoDPd8hJaSif5raiEt6q7HZABn7QtJPBqfZYtAktFdpnqoA5hyCbKrG4SYM1drAMfgyeu2cjVBwhk1vhqumU85uaaTW8tWBtNhEvFGQww7RDUa2BFXyu54zGjDPrATnkmtUUeet3KRFeMGAqxW5FmfKL7V7AfKyQKaFTYSjB4787ooMkrJH9oLt21sgiSgzahEnQMaV8WCN8RXVBVRhq1pbqgYTXtfQ4GYpWbXNcMz7qi8NpHT9o8az74wKbX18324x66Tt8NEBGgZoeef8k471MrgtKpwJ1evuhaXHFUyeGw56qmcrWtxP55Y6BJa7uVLjUD8rHXA3YyCu9y6MCDCTQEWxdEC6822hB7wBg6PzCyrzScfhDA63pUMQcxenwjRZbrdXodJa6USvc67rLomWd88FyXKQ5djcnpK7iAQydM8yBrp5xtiFhfvwL5SmuXnHTeaM8fjmxj4x6fY"
+		},
+		"pools": {
+			"flypool": {
+				"url": "eu1-beam.flypool.org",
+				"port": "3333",
+				"scheme": "stratum+tcp",
+				"password": "x"
+			}
+		},
+		"icon": "⟁",
+		"color": "cyan",
+		"extraFlags": ""
+	},
+	"BTG": {
+		"wallets": {
+			"n4d": "GLvKdaBzBo2sNeTg1Y2JAqXfYf4db6bnGU"
+		},
+		"pools": {
+			"twominers": {
+				"url": "btg.2miners.com",
+				"port": "4040",
+				"scheme": "stratum+tcp",
+				"password": "x"
+			}
+		},
+		"icon": "Ⓑ",
+		"color": "yellow",
+		"pers": "BgoldPow",
+		"extraFlags": ""
+	},
+	"ERGO": {
+		"wallets": {
+			"n4d": "9hxwYbGGJZZvUDFrHRjXoH1vMTbWD6bCCSW4KPpu59mYDEzBCuF"
+		},
+		"pools": {
+			"twominers": {
+				"url": "ergo-eu1.nanopool.org",
+				"port": "11111",
+				"scheme": "stratum+tcp",
+				"password": "x"
+			}
+		},
+		"icon": "Ʃ",
+		"color": "magenta",
+		"pers": "",
+		"extraFlags": ""
+	}
+}

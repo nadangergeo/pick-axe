@@ -1,0 +1,86 @@
+#!/bin/sh
+
+#	██    ██ ███    ██ ██ ███    ██ ███████ ████████  █████  ██      ██      
+#	██    ██ ████   ██ ██ ████   ██ ██         ██    ██   ██ ██      ██      
+#	██    ██ ██ ██  ██ ██ ██ ██  ██ ███████    ██    ███████ ██      ██      
+#	██    ██ ██  ██ ██ ██ ██  ██ ██      ██    ██    ██   ██ ██      ██      
+#	 ██████  ██   ████ ██ ██   ████ ███████    ██    ██   ██ ███████ ███████ 
+#
+#	🔥 UNINSTALL – Version 0.0.1
+#	Author: Nadan Gergeo <nadan@kth.se>
+#	ETH: 0xC0b1239c2D236DCeC286B75b74e82402C512eb42
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+# NAME OF PROCESS
+MINER=$1
+
+# Initialise option flag with a false value
+OPT_Q="false"
+OPT_R="false"
+
+# COLORING & TEXT STYLING
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+blue=`tput setaf 4`
+magenta=`tput setaf 5`
+cyan=`tput setaf 6`
+white=`tput setaf 7`
+bold=`tput bold`
+reset=`tput sgr0`
+
+helpFunction()
+{
+   echo ""
+   echo "Usage: $0 [ miner ]"
+   echo "\t-n Name of miner to uninstall (ALL/ethminer/t-rex/...). ALL is default"
+   exit 1 # Exit script after printing help
+}
+
+if [ "$MINER" = null ] || [ "$MINER" = "" ]; then
+
+		# LOOP OVER INSTALLED MINERS AND KILL
+		MINERS=`./ENABLED_MINERS`
+
+		if [ "$MINERS" != "" ]; then
+				echo "Specific miner not specified, uninstalling them all!"
+
+				for miner in $MINERS
+				do
+						./UNINSTALL "$miner"
+				done
+		fi
+
+		exit 1
+fi
+
+UNINSTALLED="false"
+
+EXISTS=`ls ./MINERS/$MINER`
+
+if [ -n "$EXISTS" ]; then
+		echo "${red}${bold}Deleting MINERS/$MINER${reset}${bold}${reset}..."
+		rm -rf ./MINERS/$MINER
+		UNINSTALLED="true"
+fi
+
+# Todo: make extra folders to delete configurable for all miners
+if [ "$MINER" = "ethminer" ]; then
+		EXISTS=`ls ./MINERS/kernels`
+
+		if [ -n "$EXISTS" ]; then
+				echo "${red}${bold}Deleting MINERS/kernels${reset}${bold}${reset}..."
+			rm -rf ./MINERS/kernels
+				UNINSTALLED="true"
+		fi
+fi
+
+if [ "$UNINSTALLED" = "true" ]; then
+		echo "${green}${bold}UNINSTALLED $MINER${reset}${bold}"
+else
+		echo "${red}${bold}NOTHING TO UNINSTALL$MINER${reset}${bold}"
+fi

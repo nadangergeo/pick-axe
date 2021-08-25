@@ -1,0 +1,216 @@
+#!/bin/bash
+
+#	██ ███    ██ ███████ ████████  █████  ██      ██      
+#	██ ████   ██ ██         ██    ██   ██ ██      ██      
+#	██ ██ ██  ██ ███████    ██    ███████ ██      ██      
+#	██ ██  ██ ██      ██    ██    ██   ██ ██      ██      
+#	██ ██   ████ ███████    ██    ██   ██ ███████ ███████
+#
+#	💽 INSTALL – Version 0.0.1
+#	Author: Nadan Gergeo <nadan@kth.se>
+#	ETH: 0xC0b1239c2D236DCeC286B75b74e82402C512eb42
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+# Get param
+miner=$1
+
+# GET CONFIGURATIONS
+MINERS_CONFIG=`cat $SCRIPTPATH/miners.json`
+MINERS=`echo $MINERS_CONFIG | jq -r keys_unsorted[]` # Maintain order (for priority).
+
+declare -a INSTALLABLE_MINERS
+declare -a REPOS
+SUPPORTED_OPTION="false"
+
+# COLORING & TEXT STYLING
+black=`tput setaf 0`
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+blue=`tput setaf 4`
+magenta=`tput setaf 5`
+cyan=`tput setaf 6`
+white=`tput setaf 7`
+bold=`tput bold`
+reset=`tput sgr0`
+
+i=0
+for m in $MINERS
+do
+	MINER=`echo $MINERS_CONFIG | jq -r ".${m}"`
+	_REPO=`echo $MINER | jq -r ".repo"`
+
+	if [ -n "$_REPO" ] && [ "$_REPO" != null ]; then
+		INSTALLABLE_MINERS[i]="${m}"
+		REPOS[i]="${_REPO}"
+
+		if [ "$m" = "$miner" ]; then
+			SUPPORTED_OPTION="true"
+			REPO=$_REPO
+		fi
+
+	fi
+
+	i=$(( i + 1 ))
+done
+
+# printf '%s\n'  ${INSTALLABLE_MINERS[@]}
+# printf '%s\n' ${REPOS[@]}
+
+# CREATE MINERS DIRECTORY (if needed)
+mkdir -p MINERS
+# CD INTE MINERS DIRECTORY
+cd MINERS
+
+# SUPPORTED MINER?
+if [ "$SUPPORTED_OPTION" = "true" ]
+then
+	MINER=`echo $MINERS_CONFIG | jq -r ".${miner}"`
+	REPO=`echo $MINER | jq -r ".repo"`
+	BIN_NAME=`echo $MINER | jq -r ".binName"`
+	FOLDER=`echo $MINER | jq -r ".folder"`
+	UNPACK_ALL_FILES=`echo $MINER | jq -r ".unpackAllFiles"`
+
+	if [ "$BIN_NAME" = "" ]; then
+		BIN_NAME=$miner; # default to miner name
+	fi
+elif [ "$miner" = "" ]; then
+	echo "${bold}Usage: INSTALL [shortname for miner]${reset}"
+	echo "Which miner do you want to install? Available Options:"
+	printf '%s\n' ${INSTALLABLE_MINERS[@]}
+	exit 1
+else
+	echo "Sorry, I cannot help you install $miner. These are the available options:"
+	printf '%s\n' ${INSTALLABLE_MINERS[@]}
+	exit 1
+fi
+
+if [ -n "$REPO" ] && [ "$SUPPORTED_OPTION" = "true" ]
+then
+	if [[ $REPO == http://* ]] || [[ $REPO == https://* ]]
+	then
+		# GITHUB DOWNLOAD URL
+		URL=$REPO
+		# EXTRACT FILENAME FROM URL
+		FILENAME="${URL##*/}"
+	else
+		# GET LATEST       
+		LATEST=`curl --silent "https://api.github.com/repos/$REPO/releases/latest"`
+		
+		# GET TAG NAME
+		TAG_NAME=`echo "${LATEST}" | jq -r '.tag_name'`
+
+		# GET ASSETS
+		ASSETS=`echo $LATEST | jq -r '.assets'`
+
+		for i in {0..1}
+		do
+			asset=`echo $ASSETS | jq -r ".[${i}]"`
+			
+			# GET FILENAME
+			FILENAME=`echo "${asset}" | jq -r '.name'`
+			filename=`echo "${FILENAME}" | tr '[:upper:]' '[:lower:]'` # lowercase
+
+			if [[ $filename = *inux* ]] || [[ $filename = *buntu* ]]
+			then
+				# echo filename:$filename
+				# GITHUB DOWNLOAD URL
+				URL="https://github.com/$REPO/releases/download/$TAG_NAME/$FILENAME"
+				break;
+			fi
+
+			i=$(( i + 1 ))
+		done
+	fi
+	
+	# WHERE TO INSTALL
+	TARGET_NAME=$miner
+
+	# GET FILE EXTENSION (needed for later)
+	extension="${filename##*.}"
+
+	#DOWNLOAD FROM GITHUB
+	echo -e "${red}${bold}YOU ARE ABOUT TO DOWNLOAD AND INSTALL VERSION $TAG_NAME OF $miner FROM:\n$URL${reset}"
+	echo
+	echo -e "${red}${bold}YOU SHOULD NEVER EVER RUN PROPRIOTARY MINING SOFTWARE ON A PRIVATE COMPUTER. ALWAYS ON A DEDICATED AND SANDBOXED COMPUTER.${reset}"
+	echo -e "${red}${bold}I TAKE NO RESPONSIBILITY FOR WHAT THE MINING SOFTWARE DO OR DO NOT DO. I JUST PROVIDE YOU WITH THIS SIMPLE SHORTCUT TO INSTALL IT, CONTINUE ON YOUR ON RISK!${reset}"
+	echo -e "${red}${bold}AND NEVER STORE YOUR WALLET (PRIVATE KEYS) ON THE SAME COMPUTER! 👀${reset}"
+	echo
+	read -p "${red}${bold}Are you sure you want to continue? Type Y to continue...${reset}" -n 1 -r
+	echo
+	if [[ $REPLY =~ ^[Yy]$ ]]
+	then
+		# DOWNLOAD
+		echo "${yellow}${bold}Downloading $FILENAME from: $URL...${reset}"
+		wget $URL -O $FILENAME
+		isZip=`file $FILENAME | grep -q "Zip archive" && echo "true" || echo "false"`
+
+		# create temporary folder
+		mkdir -p tmp
+
+		if [ "$UNPACK_ALL_FILES" = "true" ]
+		then # unpack and copy content, but exclude folder
+
+			if [ "$extension" = "zip" ] || [ $isZip = "true" ]; then
+				unzip -o $FILENAME -d ./tmp
+			else
+				tar -xf $FILENAME -C ./tmp
+			fi
+
+			# find folder using search
+			FOLDER=`find ./tmp/$FOLDER* | head -n 1`
+			# copy content
+			cp -r $FOLDER/* ./
+			# remove folder
+			rm -rf ./tmp
+		else
+			if [ -n "$FOLDER" ] && [ "$FOLDER" != null ] # inside a folder in tar?
+			then
+				echo "${bold}Unpacking...${reset}"
+
+				if [ "$extension" = "zip" ] || [ $isZip = "true" ]; then
+					unzip -o $FILENAME -d ./tmp
+				else
+					tar -xf $FILENAME -C ./tmp # unpack
+				fi
+
+				FOLDER=`find ./tmp/$FOLDER* | head -n 1` # find folder using search
+				BIN_NAME=`find $FOLDER/$BIN_NAME* | head -n 1` # find bin using search
+				mv $BIN_NAME $TARGET_NAME # copy bin from folder
+				rm -rf ./tmp # remove folder
+			else
+				echo "${bold}Unpacking...${reset}"
+
+				if [ "$extension" = "zip" ] || [ $isZip = "true" ]; then
+					unzip -o $FILENAME -d ./tmp
+				else
+					tar -xf $FILENAME -C ./tmp # unpack
+				fi
+
+				BIN_NAME=`find ./tmp/$BIN_NAME* | head -n 1` # find bin using search
+				mv $BIN_NAME $TARGET_NAME # rename to target name
+				rm -rf ./tmp # remove folder
+			fi
+		fi
+
+		echo "${bold}Cleaning up...${reset}"
+
+		# DELETE TAR
+		rm $FILENAME
+
+		# ENABLE EXECUTION PERMISSION
+		chmod +x $TARGET_NAME
+
+		echo "${green}${bold}INSTALLED${reset}${bold} miner to location: MINERS/$TARGET_NAME${reset}"
+		echo "Checkout the github page for more information on how to utilize this miner to the max, RTFM!"
+		echo "${bold}Github URL: ${blue}https://github.com/$REPO${reset}"
+		echo "${yellow}${bold}TIP:${reset} You can configure extra flags for specific miner in miners.json"
+	fi
+else
+	echo -e "No (github) repository configured for $miner. Add repo to config, or install the binary manually."
+	exit 1
+fi

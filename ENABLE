@@ -1,0 +1,71 @@
+#!/bin/sh
+
+#	███████ ███    ██  █████  ██████  ██      ███████ 
+#	██      ████   ██ ██   ██ ██   ██ ██      ██      
+#	█████   ██ ██  ██ ███████ ██████  ██      █████   
+#	██      ██  ██ ██ ██   ██ ██   ██ ██      ██      
+#	███████ ██   ████ ██   ██ ██████  ███████ ███████ 
+#
+#	🚫 DISABLE – Version 0.0.1
+#	Author: Nadan Gergeo <nadan@kth.se>
+#	ETH: 0xC0b1239c2D236DCeC286B75b74e82402C512eb42
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+# NAME OF PROCESS
+MINER=$1
+
+# Initialise option flag with a false value
+OPT_Q="false"
+OPT_R="false"
+
+# COLORING & TEXT STYLING
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+blue=`tput setaf 4`
+magenta=`tput setaf 5`
+cyan=`tput setaf 6`
+white=`tput setaf 7`
+bold=`tput bold`
+reset=`tput sgr0`
+
+helpFunction()
+{
+	echo ""
+	echo "Usage: $0 [ miner ]"
+	echo "\t-n Name of miner to enable (ethminer/trex/...)."
+	exit 1 # Exit script after printing help
+}
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied."
+	helpFunction >&2; exit 1
+fi
+
+EXISTS=`[ -f ./MINERS/$MINER ] && echo "true" || echo "false"`
+MINER_BIN=`which ./MINERS/$MINER` # EXECUTABLE? Will be empty if the file does not have execution permission
+ENABLED=`echo $MINER_BIN | { read minerLoc; [ -z $minerLoc ] && echo "false" || echo "true"; }`
+
+if [ "$EXISTS" = "true" ]
+then
+	if [ "$ENABLED" = "false" ]
+	then
+		# ENABLE EXECUTION PERMISSION
+		chmod +x MINERS/$MINER
+
+		echo "${green}${bold}ENABLED $MINER${reset}${bold}"
+	else
+		echo "$MINER is already enabled!"
+
+		# print currently disabled miners
+        echo "\nCurrently disabled miners:"
+	    ./DISABLED_MINERS
+	fi
+else
+	echo "$MINER does not exist in directory ./MINERS"
+fi

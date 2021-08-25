@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+#MINERS=`ls ./MINERS`
+MINERS=`find ./MINERS -maxdepth 1 ! -executable -type f`
+
+# If anything exists
+if [ "$MINERS" != "" ]; then
+	# Get basenames
+	MINERS=`echo $MINERS | xargs -L1 basename`
+fi
+
+#i=0
+for miner in $MINERS
+do
+	#echo "$i: $miner"
+	#i=$(( i + 1 ))
+	echo "$miner"
+done

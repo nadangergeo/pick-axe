@@ -1,0 +1,6 @@
+ ⚒️  Pick-Axe
+Version: 0.0.1
+Author: Nadan Gergeo <nadan@kth.se>
+
+Like this tool? Show some 💚 to this wallet:
+ETH: 0xC0b1239c2D236DCeC286B75b74e82402C512eb42

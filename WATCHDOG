@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+INTERUPT=`tail -10 miner.out | grep "Got interupt" | { read line; [ -z "$line" ] && echo "false" || echo "true"; }`
+TERMINATED=`tail -10 miner.out | grep Terminated | { read line; [ -z "$line" ] && echo "false" || echo "true"; }`
+DISCONNECTED=`tail -10 miner.out | grep Disconnected | { read line; [ -z "$line" ] && echo "false" || echo "true"; }`
+FINISHED=`tail -10 miner.out | grep finished | { read line; [ -z "$line" ] && echo "false" || echo "true"; }`
+
+# Has miner.out been edited in the last x minutes?
+LOG_NOT_EDITED_IN_A_WHILE=`find miner.out -mmin +3`
+LOG_NOT_EDITED_IN_A_WHILE=`[ -z $LOG_NOT_EDITED_IN_A_WHILE ] && echo "false" || echo "true"`
+
+if [ "$INTERUPT" = "true" ] || [ "$TERMINATED" = "true" ] || [ "$DISCONNECTED" = "true" ] || [ "$FINISHED" = "true" ]  || [ "$LOG_NOT_EDITED_IN_A_WHILE" = "true" ]
+then
+	DATETIMESTAMP=$(date +"%FT%H%M%S")
+	echo "Watchdog - $DATETIMESTAMP: miner is dead, restarting..." >> watchdog.log
+	./PICK
+fi

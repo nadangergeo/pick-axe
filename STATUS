@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+# DEFAULT OPTIONS
+TICKET=
+FILE="STATUS.csv"
+
+# COLORING & TEXT STYLING
+black=`tput setaf 0`
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+blue=`tput setaf 4`
+magenta=`tput setaf 5`
+cyan=`tput setaf 6`
+white=`tput setaf 7`
+bold=`tput bold`
+reset=`tput sgr0`
+
+helpFunction()
+{
+	echo ""
+	echo "Usage: $0 [ -n -f ]"
+	echo "\t-t N-th last ticket"
+	echo "\t-f file"
+	exit 1 # Exit script after printing help
+}
+
+# Transform long options to short ones
+for arg in "$@"; do
+	shift
+	case "$arg" in
+		"--ticket")	set -- "$@" "-t" ;;
+		"--file")	set -- "$@" "-f" ;;
+		*)			set -- "$@" "$arg"
+	esac
+done
+
+while getopts ":t:f" opt
+do
+   case "$opt" in
+		"t") TICKET="$OPTARG" ;;
+		"f") FILE="$OPTARG" ;;
+		"?" ) helpFunction ;; # Print helpFunction
+	esac
+done
+
+# If ticket number is defined
+if [ -n "$TICKET" ]; then
+	FILE=`ls tickets | tail -$TICKET | head -1`
+	FILE="./tickets/$FILE"
+fi
+
+STATUS=`cat $FILE`
+DEAD=`echo $STATUS | grep -c DEAD`
+
+# Print mining info
+if [ "$DEAD" = "1" ]; then
+	echo -e $STATUS | tty-table --header tty-configs/dead.json
+else
+	echo -e $STATUS | tty-table --header tty-configs/ticket.json
+fi

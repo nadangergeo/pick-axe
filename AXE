@@ -1,0 +1,109 @@
+#!/bin/sh
+
+#	 █████  ██   ██ ███████ 
+#	██   ██  ██ ██  ██      
+#	███████   ███   █████   
+#	██   ██  ██ ██  ██      
+#	██   ██ ██   ██ ███████ 
+#
+#   🪓 AXE – Version 0.0.1
+#	Author: Nadan Gergeo <nadan@kth.se>
+#	ETH: 0xC0b1239c2D236DCeC286B75b74e82402C512eb42
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+# NAME OF PROCESS
+MINER="ALL"
+
+# Initialise option flag with a false value
+OPT_Q="false"
+OPT_R="false"
+
+# COLORING & TEXT STYLING
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+blue=`tput setaf 4`
+magenta=`tput setaf 5`
+cyan=`tput setaf 6`
+white=`tput setaf 7`
+bold=`tput bold`
+reset=`tput sgr0`
+
+helpFunction()
+{
+   echo ""
+   echo "Usage: $0 [ -n miner -q -r ]"
+   echo "\t-n Name of miner to kill (ALL/ethminer/t-rex/...). ALL is default"
+   echo "\t-q Quiet? Don't complain if no process is running."
+   echo "\t-r Running? Print if the process is running before killing."
+   exit 1 # Exit script after printing help
+}
+
+# Transform long options to short ones
+for arg in "$@"; do
+  shift
+  case "$arg" in
+    "--name")		set -- "$@" "-n" ;;
+    "--quiet")		set -- "$@" "-q" ;;
+    "--running")	set -- "$@" "-r" ;;
+    *)			set -- "$@" "$arg"
+  esac
+done
+
+while getopts ":n:q FLAG:r FLAG" opt
+do
+   case "$opt" in
+      "n") MINER="$OPTARG" ;;
+      "q") OPT_Q="true" ;;
+      "r") OPT_R="true" ;;
+     "?" ) helpFunction ;; # Print helpFunction
+   esac
+done
+
+if [ $MINER = "ALL" ]
+then
+	if [ "$OPT_Q" = "true" ]
+	then
+		FLAG_Q=-q
+	else
+		echo "Specific miner not specified, killing all!"
+	fi
+
+	if [ "$OPT_R" = "true" ]
+	then
+		FLAG_R=-r
+	fi
+
+	# LOOP OVER INSTALLED MINERS AND KILL
+	MINERS=`./ENABLED_MINERS`
+	for miner in $MINERS
+	do
+		./AXE -n $miner $FLAG_Q $FLAG_R
+	done
+
+	exit 1
+fi
+
+pcount=`pgrep $MINER --count`
+
+if [ $pcount != "0" ]
+then
+	if [ $OPT_R = "true" ]
+	then
+		echo "$MINER is already running..."
+	fi
+
+	#echo "${pcount} number of miner processes running."
+
+	killall -q $MINER
+	echo "$MINER ${red}${bold}KILLED!${reset} ☠️ "
+elif [ $OPT_Q = "false" ]
+then
+	echo "$MINER is not running."
+fi
+
+echo -e "DEAD ☠️\t" > ./STATUS.csv

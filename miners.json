@@ -1,0 +1,73 @@
+{
+    "trex": {
+        "name": "T-Rex",
+        "icon": "🦖",
+        "repo": "trexminer/T-Rex",
+        "binName": "t-rex",
+        "algoFlag": "-a",
+        "algos": {
+            "eth": "ethash",
+            "etc": "etchash",
+            "ergo": "autolykos2",
+            "rvn": "kawpow",
+            "cfx": "octopus",
+            "sero": "progpow",
+            "veil": "progpow-veil",
+            "firo": "mtp"
+        },
+        "extraFlags": "--api-bind-telnet 0 --api-bind-http 0.0.0.0:1337 --api-read-only"
+    },
+    "ethminer": {
+        "name": "ethminer",
+        "repo":"ethereum-mining/ethminer",
+        "folder": "bin",
+        "binName": "ethminer",
+        "unpackAllFiles":"true",
+        "algoFlag": "",
+        "algos": {
+            "eth": ""
+        },
+        "extraFlags": ""
+    },
+    "nbminer": {
+        "name": "NBMiner",
+        "repo": "NebuTech/NBMiner",
+        "folder": "NBMiner_Linux",
+        "binName": "nbminer",
+        "algoFlag": "-a",
+        "algos": {
+            "eth": "ethash",
+            "etc": "etchash",
+            "rvn": "kawpow",
+            "beam": "beamv3",
+            "grin31": "cuckatoo",
+            "grin32": "cuckatoo32",
+            "ae": "cuckoo_ae",
+            "sero": "progpow_sero",
+            "cfx": "octopus",
+            "ergo": "ergo"
+        },
+        "extraFlags": ""
+    },
+    "gminer": {
+        "name": "GMiner",
+        "repo": "develsoftware/GMinerRelease",
+        "binName": "miner",
+        "algoFlag": "-a",
+        "algos": {
+            "eth": "ethash",
+            "etc": "etchash",
+            "rvn": "kawpow",
+            "beam": "beamhash",
+            "ctxc": "cortex",
+            "equihash144_5": "equihash144_5",
+            "equihash125_4": "equihash125_4",
+            "equihash192_7": "equihash192_7",
+            "equihash210_9": "equihash210_9",
+            "cuckoo29": "cuckoo29",
+            "ae": "aeternity",
+            "btg": "equihash144_5"
+        },
+        "extraFlags": ""
+    }
+}

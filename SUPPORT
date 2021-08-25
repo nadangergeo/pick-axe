@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+# NAME OF PROCESS
+MINER=$1
+
+# Initialise option flag with a false value
+OPT_Q="false"
+OPT_R="false"
+
+# COLORING & TEXT STYLING
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+blue=`tput setaf 4`
+magenta=`tput setaf 5`
+cyan=`tput setaf 6`
+white=`tput setaf 7`
+bold=`tput bold`
+reset=`tput sgr0`
+
+helpFunction()
+{
+   echo ""
+   echo "Usage: $0 [ miner ]"
+   echo "\t-n Name of miner to uninstall (ALL/ethminer/t-rex/...). ALL is default"
+   exit 1 # Exit script after printing help
+}
+
+if [ "$MINER" = null ] || [ "$MINER" = "" ]; then
+
+        # LOOP OVER INSTALLED MINERS AND DO ACTION
+        MINERS=`./ENABLED_MINERS`
+
+        if [ "$MINERS" != "" ]; then
+                for miner in $MINERS
+                do
+                        ./SUPPORT "$miner"
+                done
+        fi
+
+        exit 1
+fi
+
+MINERS_CONFIG=`cat miners.json`
+echo $MINERS_CONFIG | jq -r .$MINER.algos  | jq -r keys_unsorted[]

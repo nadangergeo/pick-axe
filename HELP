@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# GET PATH OF THIS SCRIPT
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+# CD TO SCRIPT PATH
+cd $SCRIPTPATH
+
+SPACER=" "
+
+PICK_ICN="⛏️"
+PICK_CMD="${bold}PICK${reset}"
+PICK_DSC="Start mining"
+
+AXE_ICN="🪓"
+AXE_CMD="${bold}AXE${reset}"
+AXE_DSC="Kill miner(s)"
+
+INSTALL_ICN="💽"
+INSTALL_CMD="${bold}INSTALL${reset}"
+INSTALL_DSC="Install miner(s)"
+
+UNINSTALL_ICN="🔥"
+UNINSTALL_CMD="${bold}UNINSTALL${reset}"
+UNINSTALL_DSC="Uninstall miner(s)"
+
+ENABLE_ICN="🟢"
+ENABLE_CMD="${bold}ENABLE${reset}"
+ENABLE_DSC="Enable miner"
+
+DISABLE_ICN="🚫"
+DISABLE_CMD="${bold}DISABLE${reset}"
+DISABLE_DSC="Disable miner"
+
+TAIL_ICN="🦎"
+TAIL_CMD="${bold}TAIL${reset}"
+TAIL_DSC="Tail the mining process(es)"
+
+STATUS_ICN="🎫"
+STATUS_CMD="${bold}STATUS${reset}"
+STATUS_DSC="Check current or past tickets\t"
+
+HELP_ICN="📖"
+HELP_CMD="${bold}HELP${reset}"
+HELP_DSC="Show this manual"
+
+SUPPORT_ICN="✅"
+SUPPORT_CMD="${bold}SUPPORT${reset}"
+SUPPORT_DSC="Check which coins are supported with the currently installed miners."
+
+COMMANDS="$PICK_ICN $SPACER$SPACER$PICK_CMD, $PICK_DSC\n
+$AXE_ICN $SPACER$AXE_CMD, $AXE_DSC\n
+$INSTALL_ICN $SPACER$INSTALL_CMD, $INSTALL_DSC\n
+$UNINSTALL_ICN $SPACER$UNINSTALL_CMD, $UNINSTALL_DSC\n
+$ENABLE_ICN $SPACER$ENABLE_CMD, $ENABLE_DSC\n
+$DISABLE_ICN $SPACER$DISABLE_CMD, $DISABLE_DSC\n
+$TAIL_ICN $SPACER$TAIL_CMD, $TAIL_DSC\n
+$STATUS_ICN $SPACER$STATUS_CMD, $STATUS_DSC\n
+$HELP_ICN $SPACER$HELP_CMD, $HELP_DSC"
+
+#$SUPPORT_ICN $SPACER$SUPPORT_CMD, $SUPPORT_DSC\n
+
+# extra lines over banner
+echo -e "\n"
+# print authors.txt
+cat templates/banner.txt  
+# extra lines under banner
+echo -e "\n"
+# COMMAND TABLE
+echo -e $COMMANDS | tty-table --header tty-configs/commands.json
+
+PKG=`cat package.json`
+
+TITLE=`echo $PKG | jq -r .title`
+VERSION=`echo $PKG | jq -r .version`
+AUTHOR=`echo $PKG | jq -r .author`
+LICENSE=`echo $PKG | jq -r .license`
+ICON=`echo $PKG | jq -r .icon`
+
+ABOUT="$ICON  $TITLE\nVersion: $VERSION\nAuthor: $AUTHOR\nLicence: 🔑 $LICENSE"
+
+# cat templates/author.txt | tty-table --header tty-configs/about.json
+
+# ABOUT (title, version, author, license), get from package.json.
+echo -e $ABOUT | tty-table --header tty-configs/about.json
+
+# DONATION (wallet adresses)
+cat templates/donation.txt | tty-table --header tty-configs/donation.json

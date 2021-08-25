@@ -299,6 +299,11 @@ case $MINER in
 		COMMAND="$MINER_BIN -P $POOL_SCHEME://$WALLET.$WORKER:$POOL_PASSWORD@$POOL_URL:$POOL_PORT $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
 		;;
 
+	"miniz")
+		# SET COMMAND
+		COMMAND="$MINER_BIN $ALGO_FLAG$ALGO --server $POOL_URL --port $POOL_PORT --user $WALLET --pass $POOL_PASSWORD --worker $WORKER --pers=$PERS $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
+		;;
+
 	*)
 		# Not supported by miner, print error and exit
 		echo "Can't start! ${MINER} does not support ${COIN}." 1>&2

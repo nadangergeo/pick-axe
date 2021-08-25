@@ -66,8 +66,47 @@
             "equihash210_9": "equihash210_9",
             "cuckoo29": "cuckoo29",
             "ae": "aeternity",
-            "btg": "equihash144_5"
+            "btg": "equihash144_5",
+            "btcz": "equihash144_5"
         },
         "extraFlags": ""
+    },
+    "miniz": {
+        "name": "miniZ",
+        "repo": "https://miniz.ch/?smd_process_download=1&download_id=4368",
+        "sha256": "2b32aa73b78f855d78fe31883891dd1165f39dc8f13b1d711b7efbc5c44905d4",
+        "binSha256sum": "01dba57342ce2413013fd8959279cf1be8d036de57a01e135d032b82208453ee",
+        "binName": "miniZ",
+        "algoFlag": "--par=",
+        "algos": {
+            "eth": "Ethash",
+            "etc": "Ethash",
+            "btg": "144,5",
+            "btcz": "144,5",
+            "tent": "144,5",
+            "bze": "144,5",
+            "ltz": "144,5",
+            "zel": "125,4",
+            "beam": "144,5s",
+            "zer": "192,7",
+            "safe": "192,7",
+            "vdl": "192,7",
+            "zerc": "192,7",
+            "yec": "192,7",
+            "zcl": "192,7",
+            "arw": "192,7",
+            "anon": "192,7",
+            "aion": "210,9",
+            "grimmm": "150,5",
+            "cash": "150,5",
+            "mnx": "96,5",
+            "rvn": "KawPoW",
+            "zels": "KawPoW",
+            "zano": "ProgPoW",
+            "vbk": "ProgPoW",
+            "sero": "ProgPoW",
+            "veil": "ProgPoW"
+        },
+        "extraFlags": "--smart-pers"
     }
 }

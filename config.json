@@ -91,7 +91,7 @@
 			"n4d": "9hxwYbGGJZZvUDFrHRjXoH1vMTbWD6bCCSW4KPpu59mYDEzBCuF"
 		},
 		"pools": {
-			"twominers": {
+			"nanopool": {
 				"url": "ergo-eu1.nanopool.org",
 				"port": "11111",
 				"scheme": "stratum+tcp",
@@ -101,6 +101,23 @@
 		"icon": "Ʃ",
 		"color": "magenta",
 		"pers": "",
+		"extraFlags": ""
+	},
+	"BTCZ": {
+		"wallets": {
+			"n4d": "t1gCMafZ9dobvoEMaGiiqirPfq5m1kiGbUf"
+		},
+		"pools": {
+			"darkfibermines": {
+				"url": "142.4.211.28",
+				"port": "4000",
+				"scheme": "stratum+tcp",
+				"password": "x"
+			}
+		},
+		"icon": "ⓩ",
+		"color": "yellow",
+		"pers": "BitcoinZ",
 		"extraFlags": ""
 	}
 }

@@ -8,11 +8,11 @@ Toolkit & Package-manager for mining on Linux
 
 ![Screenshot of pick-axe STATUS command](https://github.com/nadangergeo/pick-axe/blob/main/screenshots/pick-axe_status_screenshot.png)
 
-The package manager can install/update the following: trex, gminer, nbminer, ethminer...
+The package manager can install/update the following: trex, gminer, nbminer, ethminer, miniZ...
 with more to follow!
 
 By extension, PICK-AXE has support for mining the following coins/algos:
-ae, beam, btg, cfx, ctxc, cuckoo29, equihash125_4, equihash144_5, equihash192_7, equihash210_9, ergo, etc, eth, firo, grin31, grin32, rvn, sero, veil
+ae, aion, anon, arw, beam, btg, btcz, bze, cash, cfx, ctxc, cuckoo29, equihash125_4, equihash144_5, equihash192_7, equihash210_9, ergo, etc, eth, firo, grimmm, grin31, grin32, ltz, mnx, rvn, safe, sero, tent, vbk, vdl, veil, yec, zano, zcl, zel, zels, zerc
 
 This is *NOT* a yet-another-f*cking*-miner. This is a toolset of a bunch of bash-scripts, which
 togheter forms PICK-AXE - a general utility for mining on linux AND somewhat of a package manager for miners.
@@ -140,8 +140,6 @@ This setup will be more streamlined via CLI in the near future!
 ![Screenshot of pick-axe pick command](https://github.com/nadangergeo/pick-axe/blob/main/screenshots/pick-axe_pick_screenshot.png)
 
 ## Donations
-As mentioned earlier, this tool doesn't have any dev fees.  
-But if you like the tool and want to show some 🖤  
-you can donate to the following wallet. Thank you!
+Like this tool? Show some :black_heart:   to this wallet:
 
 **ETH:** 0xC0b1239c2D236DCeC286B75b74e82402C512eb42

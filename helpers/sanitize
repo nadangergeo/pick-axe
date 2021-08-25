@@ -1,5 +1,5 @@
 #!/bin/bash
-# SANITIZE! REMOVE EVERYTHING EXCEPT: a-z A-Z 0-0 underscore (_) dash (-) plus (+) colon (:) space period (.) forward-slash (/) and @
+# SANITIZE! REMOVE EVERYTHING EXCEPT: a-z A-Z 0-0 underscore (_) dash (-) plus (+) colon (:) space period (.) comma (,) equals (=) forward-slash (/) and @
 STRING=$@
-SANITIZED_STRING=${STRING//[^a-zA-Z0-9_\-\+: \@\/\.]/}
+SANITIZED_STRING=${STRING//[^a-zA-Z0-9_\-\+: \@\/\.,=]/}
 echo $SANITIZED_STRING

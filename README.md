@@ -64,11 +64,11 @@ Read /docs/AMD.md
 ### 3. Install PICK-AXE
 
  ```sh
-wget https://github.com/nadangergeo/pick-axe/archive/refs/tags/0.0.1.tar.gz -O pick-axe-0.0.1.tar.gz
+wget https://github.com/nadangergeo/pick-axe/archive/refs/tags/0.0.2.tar.gz -O pick-axe-0.0.2.tar.gz
 INSTALL_PATH=~/.local/bin
 mkdir -p $INSTALL_PATH # Create install target directory if needed
-tar -xf pick-axe-0.0.1.tar.gz # Unpack tar
-mv pick-axe-0.0.1 $INSTALL_PATH/pick-axe # Move Pick-Axe to ./local/bin
+tar -xf pick-axe-0.0.2.tar.gz # Unpack tar
+mv pick-axe-0.0.2 $INSTALL_PATH/pick-axe # Move Pick-Axe to ./local/bin
 chmod +x $INSTALL_PATH/pick-axe/INSTALL # Give install execution permission 
 ```
 

@@ -51,8 +51,8 @@ Trying to control the GPU:s will throw errors at your way (fans, clock-settings,
 unless you add the following line to your ~/.bashrc:
 
  ```sh
+echo "" >> .bashrc # new line
 echo "export DISPLAY=:0" >> .bashrc
-source .bashrc
 ```
 
 It will take effect on the next login, unless you source ~/.bashrc:

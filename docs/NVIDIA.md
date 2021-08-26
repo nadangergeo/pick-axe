@@ -5,12 +5,25 @@ https://launchpad.net/~graphics-drivers/+archive/ubuntu/ppa
 
 While writing this, the latest version is 470, so let's use that number.
 Notice that it should be "nvidia-driver-470", *not* "nvidia-470" or "nvidia-graphics-driver-470"
+Run one command at a time!
 
  ```sh
 sudo apt-add-repository ppa:graphics-drivers/ppa
+```
+
+ ```sh
 sudo apt-get update
+```
+
+ ```sh
 sudo apt install -y nvidia-driver-470
+```
+
+ ```sh
 sudo apt install -y nvidia-cuda-toolkit
+```
+
+ ```sh
 sudo apt install -y nvidia-utils-470
 ```
 

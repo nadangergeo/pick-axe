@@ -110,6 +110,9 @@ source ~/.bashrc
 ```
 
 ### 5. Install miner binaries
+
+This will give you a list of options:
+
  ```sh
 INSTALL
 ```
@@ -119,12 +122,12 @@ or (depending on what option you chose in STEP 4)
 pax INSTALL
 ```
 
-This will give you a list of options.
+Install a miner, ethminer for example:
 
  ```sh
 INSTALL ethminer
 ```
-or for example:
+Install trex, as another example:
 
  ```sh
 pax INSTALL trex

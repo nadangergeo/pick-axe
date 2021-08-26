@@ -48,11 +48,11 @@ nvidia-smi
 ```
 
 Trying to control the GPU:s will throw errors at your way (fans, clock-settings, etc..),
-unless you add the following line to your ~/.bashrc:
+unless you add "export DISPLAY=:0" to ~/.bashrc:
 
  ```sh
-echo "" >> .bashrc # new line
-echo "export DISPLAY=:0" >> .bashrc
+echo >> ~/.bashrc # new line
+echo "export DISPLAY=:0" >> ~/.bashrc
 ```
 
 It will take effect on the next login, unless you source ~/.bashrc:

@@ -9,7 +9,9 @@ Notice that it should be "nvidia-driver-470", *not* "nvidia-470" or "nvidia-grap
  ```sh
 sudo apt-add-repository ppa:graphics-drivers/ppa
 sudo apt-get update
-sudo apt install -y nvidia-driver-470 nvidia-cuda-toolkit nvidia-utils-470
+sudo apt install -y nvidia-driver-470
+sudo apt install -y nvidia-cuda-toolki
+sudo apt install -y nvidia-utils-470
 ```
 
 Verify that the drivers are now installed

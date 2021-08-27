@@ -245,7 +245,7 @@ then
 		chmod +x $TARGET_NAME
 
 		echo "${green}${bold}INSTALLED${reset}${bold} miner to location: MINERS/$TARGET_NAME${reset}"
-		echo "Checkout the github page for more information on how to utilize this miner to the max, RTFM!"
+		echo "Checkout the miner's homepage for more information on how to utilize this miner to the max, RTFM!"
 		echo "${bold}Homepage URL: ${blue}$HOMEPAGE${reset}"
 		echo "${yellow}${bold}TIP:${reset} You can configure extra flags for specific miner in miners.json"
 	fi

@@ -3,6 +3,9 @@
         "name": "T-Rex",
         "icon": "🦖",
         "repo": "trexminer/T-Rex",
+        "homepage": "https://github.com/trexminer/T-Rex",
+        "nvidia": "true",
+        "amd": "false",
         "binName": "t-rex",
         "algoFlag": "-a",
         "algos": {
@@ -20,6 +23,9 @@
     "ethminer": {
         "name": "ethminer",
         "repo":"ethereum-mining/ethminer",
+        "homepage": "https://github.com/ethereum-mining/ethminer",
+        "nvidia": "true",
+        "amd": "true",
         "folder": "bin",
         "binName": "ethminer",
         "unpackAllFiles":"true",
@@ -32,6 +38,9 @@
     "nbminer": {
         "name": "NBMiner",
         "repo": "NebuTech/NBMiner",
+        "homepage": "https://github.com/NebuTech/NBMiner",
+        "nvidia": "true",
+        "amd": "true",
         "folder": "NBMiner_Linux",
         "binName": "nbminer",
         "algoFlag": "-a",
@@ -52,6 +61,9 @@
     "gminer": {
         "name": "GMiner",
         "repo": "develsoftware/GMinerRelease",
+        "homepage": "https://github.com/develsoftware/GMinerRelease",
+        "nvidia": "true",
+        "amd": "true",
         "binName": "miner",
         "algoFlag": "-a",
         "algos": {
@@ -74,6 +86,9 @@
     "miniz": {
         "name": "miniZ",
         "repo": "https://miniz.ch/?smd_process_download=1&download_id=4368",
+        "homepage": "https://miniz.ch/",
+        "nvidia": "true",
+        "amd": "false",
         "sha256": "2b32aa73b78f855d78fe31883891dd1165f39dc8f13b1d711b7efbc5c44905d4",
         "binSha256sum": "01dba57342ce2413013fd8959279cf1be8d036de57a01e135d032b82208453ee",
         "binName": "miniZ",

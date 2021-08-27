@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# [[ -n $(lspci | grep VGA | grep NVIDIA) ]] && echo "true" || echo "false"
+lspci | grep VGA | grep -c NVIDIA

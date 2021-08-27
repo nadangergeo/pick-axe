@@ -38,21 +38,60 @@ white=`tput setaf 7`
 bold=`tput bold`
 reset=`tput sgr0`
 
+helpFunction()
+{
+
+	echo -e "${bold}Usage: INSTALL ${blue}[shortname for miner]${reset}"
+	echo
+	echo -e "${bold}Available Options:${reset}"
+	printf '%s\n' "${INSTALLABLE_MINERS[@]}"
+	echo
+	echo -e "${bold}Installed GPUs:${reset}"
+	[[ $nvidia_installed -gt 0 ]] && echo "${green}${nvidia_installed} NVIDIA GPUs detected${reset}" || echo "${red}${nvidia_installed} NVIDIA GPUs detected${reset}";
+	[[ $amd_installed -gt 0 ]] && echo "${green}${amd_installed} AMD GPUs detected${reset}" || echo "${red}${amd_installed} AMD GPUs detected${reset}";
+	echo
+	exit 1
+}
+
+# CHECK INSTALLED GPUS
+nvidia_installed=`$SCRIPTPATH/helpers/nvidia_gpu_installed`
+amd_installed=`$SCRIPTPATH/helpers/amd_gpu_installed`
+
 i=0
 for m in $MINERS
 do
 	MINER=`echo $MINERS_CONFIG | jq -r ".${m}"`
 	_REPO=`echo $MINER | jq -r ".repo"`
+	HOMEPAGE=`echo $MINER | jq -r ".homepage"`
+	NVIDIA=`echo $MINER | jq -r ".nvidia"`
+	AMD=`echo $MINER | jq -r ".amd"`
+
+	if [ "$nvidia_installed" -gt 0 ] && [ "$NVIDIA" = "true" ] && [ "$amd_installed" -gt 0 ] && [ "$AMD" = "true" ]; then
+		COMPAT="NVIDIA & AMD compatible!"
+	elif [ "$nvidia_installed" -gt 0 ] && [ "$NVIDIA" = "true" ]; then
+		COMPAT="NVIDIA compatible!"
+	elif [ "$amd_installed" -gt 0 ] && [ "$AMD" = "true" ]; then
+		COMPAT="AMD compatible!"
+	fi
+
+	if [ "${COMPAT}" != "" ]; then
+		COMPAT_TXT="${green}${COMPAT}${reset}"
+	else
+		if [ "${NVIDIA}" = true ]; then
+			COMPAT_TXT="${red}Not compatible - NVIDIA only!${reset}"
+		else
+			COMPAT_TXT="${red}Not compatible - AMD only!${reset}"
+		fi
+	fi
 
 	if [ -n "$_REPO" ] && [ "$_REPO" != null ]; then
-		INSTALLABLE_MINERS[i]="${m}"
+		INSTALLABLE_MINERS[i]="${blue}${bold}${m}${reset} - ${COMPAT_TXT}"
 		REPOS[i]="${_REPO}"
 
-		if [ "$m" = "$miner" ]; then
+		if [ "$m" = "$miner" ] && [ "${COMPAT}" != "" ]; then
 			SUPPORTED_OPTION="true"
 			REPO=$_REPO
 		fi
-
 	fi
 
 	i=$(( i + 1 ))
@@ -79,14 +118,14 @@ then
 		BIN_NAME=$miner; # default to miner name
 	fi
 elif [ "$miner" = "" ]; then
-	echo "${bold}Usage: INSTALL [shortname for miner]${reset}"
-	echo "Which miner do you want to install? Available Options:"
-	printf '%s\n' ${INSTALLABLE_MINERS[@]}
-	exit 1
+	helpFunction
 else
-	echo "Sorry, I cannot help you install $miner. These are the available options:"
-	printf '%s\n' ${INSTALLABLE_MINERS[@]}
-	exit 1
+	echo -e "Sorry, I cannot help you install $miner."
+	if [ "${COMPAT}" != "" ]; then
+		echo "${red}${miner} is not compatible with your system!${reset}"
+	fi
+	echo
+	helpFunction
 fi
 
 if [ -n "$REPO" ] && [ "$SUPPORTED_OPTION" = "true" ]
@@ -207,7 +246,7 @@ then
 
 		echo "${green}${bold}INSTALLED${reset}${bold} miner to location: MINERS/$TARGET_NAME${reset}"
 		echo "Checkout the github page for more information on how to utilize this miner to the max, RTFM!"
-		echo "${bold}Github URL: ${blue}https://github.com/$REPO${reset}"
+		echo "${bold}Homepage URL: ${blue}$HOMEPAGE${reset}"
 		echo "${yellow}${bold}TIP:${reset} You can configure extra flags for specific miner in miners.json"
 	fi
 else

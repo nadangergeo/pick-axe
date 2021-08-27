@@ -306,7 +306,8 @@ case $MINER in
 
 	*)
 		# Not supported by miner, print error and exit
-		echo "Can't start! ${MINER} does not support ${COIN}." 1>&2
+		# echo "Can't start! ${MINER} does not support ${COIN}." 1>&2
+		echo "Can't start! Pick-Axe does not support ${MINER}." 1>&2
 		exit 420
 		;;
 esac

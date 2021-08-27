@@ -62,35 +62,44 @@ for m in $MINERS
 do
 	MINER=`echo $MINERS_CONFIG | jq -r ".${m}"`
 	_REPO=`echo $MINER | jq -r ".repo"`
-	HOMEPAGE=`echo $MINER | jq -r ".homepage"`
 	NVIDIA=`echo $MINER | jq -r ".nvidia"`
 	AMD=`echo $MINER | jq -r ".amd"`
 
 	if [ "$nvidia_installed" -gt 0 ] && [ "$NVIDIA" = "true" ] && [ "$amd_installed" -gt 0 ] && [ "$AMD" = "true" ]; then
-		COMPAT="NVIDIA & AMD compatible!"
+		COMPAT="true"
+		COMPAT_TXT="NVIDIA & AMD compatible!"
 	elif [ "$nvidia_installed" -gt 0 ] && [ "$NVIDIA" = "true" ]; then
-		COMPAT="NVIDIA compatible!"
+		COMPAT="true"
+		COMPAT_TXT="NVIDIA compatible!"
 	elif [ "$amd_installed" -gt 0 ] && [ "$AMD" = "true" ]; then
-		COMPAT="AMD compatible!"
+		COMPAT="true"
+		COMPAT_TXT="AMD compatible!"
+	else
+		COMPAT="false"
+
+		if [ "${NVIDIA}" = true ]; then
+			COMPAT_TXT="Not compatible - NVIDIA only!"
+		else
+			COMPAT_TXT="Not compatible - AMD only!"
+		fi
 	fi
 
-	if [ "${COMPAT}" != "" ]; then
-		COMPAT_TXT="${green}${COMPAT}${reset}"
+	# color
+	if [ "${COMPAT}" = "true" ]; then
+		COMPAT_TXT="${green}${COMPAT_TXT}${reset}"
 	else
-		if [ "${NVIDIA}" = true ]; then
-			COMPAT_TXT="${red}Not compatible - NVIDIA only!${reset}"
-		else
-			COMPAT_TXT="${red}Not compatible - AMD only!${reset}"
-		fi
+		COMPAT_TXT="${red}${COMPAT_TXT}${reset}"
 	fi
 
 	if [ -n "$_REPO" ] && [ "$_REPO" != null ]; then
 		INSTALLABLE_MINERS[i]="${blue}${bold}${m}${reset} - ${COMPAT_TXT}"
 		REPOS[i]="${_REPO}"
 
-		if [ "$m" = "$miner" ] && [ "${COMPAT}" != "" ]; then
+		if [ "$m" = "$miner" ]; then
 			SUPPORTED_OPTION="true"
+			COMPAT_OPTION=$COMPAT
 			REPO=$_REPO
+			HOMEPAGE=`echo $MINER | jq -r ".homepage"`
 		fi
 	fi
 
@@ -106,7 +115,7 @@ mkdir -p MINERS
 cd MINERS
 
 # SUPPORTED MINER?
-if [ "$SUPPORTED_OPTION" = "true" ]
+if [ "$SUPPORTED_OPTION" = "true" ] && [ "${COMPAT_OPTION}" = "true" ]
 then
 	MINER=`echo $MINERS_CONFIG | jq -r ".${miner}"`
 	REPO=`echo $MINER | jq -r ".repo"`
@@ -121,9 +130,13 @@ elif [ "$miner" = "" ]; then
 	helpFunction
 else
 	echo -e "Sorry, I cannot help you install $miner."
-	if [ "${COMPAT}" != "" ]; then
+
+	if [ "$SUPPORTED_OPTION" = "false" ]; then
+		echo "${red}${miner} is not a miner supported by Pick-Axe!${reset}"
+	else
 		echo "${red}${miner} is not compatible with your system!${reset}"
 	fi
+
 	echo
 	helpFunction
 fi
@@ -245,7 +258,7 @@ then
 		chmod +x $TARGET_NAME
 
 		echo "${green}${bold}INSTALLED${reset}${bold} miner to location: MINERS/$TARGET_NAME${reset}"
-		echo "Checkout the miner's homepage for more information on how to utilize this miner to the max, RTFM!"
+		echo "Checkout ${miner}'s homepage for more information on how to utilize this miner to the max, RTFM!"
 		echo "${bold}Homepage URL: ${blue}$HOMEPAGE${reset}"
 		echo "${yellow}${bold}TIP:${reset} You can configure extra flags for specific miner in miners.json"
 	fi

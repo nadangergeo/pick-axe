@@ -68,7 +68,7 @@ wget https://github.com/nadangergeo/pick-axe/archive/refs/tags/0.0.3.tar.gz -O p
 INSTALL_PATH=~/.local/bin
 mkdir -p $INSTALL_PATH # Create install target directory if needed
 tar -xf pick-axe-0.0.3.tar.gz # Unpack tar
-mv pick-axe-0.0.3 $INSTALL_PATH/pick-axe # Move Pick-Axe to ./local/bin
+mv -f pick-axe-0.0.3 $INSTALL_PATH/pick-axe # Move Pick-Axe to ./local/bin
 chmod +x $INSTALL_PATH/pick-axe/INSTALL # Give install execution permission
 [ -d $INSTALL_PATH/pick-axe ] && echo "$(tput setaf 2)PICK-AXE version 0.0.3 successfully installed! $(tput sgr0)" && rm -f pick-axe-0.0.3.tar.gz || echo -e "$(tput setaf 1)PICK-AXE installation failed! $(tput sgr0)\nTry unpacking the archive into $INSTALL_PATH/pick-axe manually!"
 

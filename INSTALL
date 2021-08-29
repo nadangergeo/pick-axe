@@ -197,7 +197,7 @@ then
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
 		# DOWNLOAD
-		echo "${yellow}${bold}Downloading $FILENAME from: $URL...${reset}"
+		echo "${yellow}${bold}Downloading $FILENAME from: ${blue}$URL...${reset}"
 		wget $URL -O $FILENAME
 		isZip=`file $FILENAME | grep -q "Zip archive" && echo "true" || echo "false"`
 

@@ -1,0 +1,88 @@
+#!/bin/bash
+
+name="pick-axe"
+NAME=`echo $name | tr '[:lower:]' '[:upper:]'` # name in uppercase
+REPO="nadangergeo/$name"
+INSTALL_PATH="$HOME/.local/bin"
+TMP_PATH="$HOME/.local/bin/tmp"
+
+# COLORING & TEXT STYLING
+black=`tput setaf 0`
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+blue=`tput setaf 4`
+magenta=`tput setaf 5`
+cyan=`tput setaf 6`
+white=`tput setaf 7`
+bold=`tput bold`
+reset=`tput sgr0`
+
+# Create install target if needed
+mkdir -p $INSTALL_PATH
+
+# tmp directory if needed
+mkdir -p $TMP_PATH
+
+# GET LATEST ASSET    
+ASSETS=`curl --silent "https://api.github.com/repos/$REPO/tags"`
+LATEST_ASSET=`echo $ASSETS | jq -r ".[0]"`
+
+# GET VERSION (TAG NAME)
+VERSION=`echo "${LATEST_ASSET}" | jq -r '.name'`
+    
+# GET FILENAME
+FILENAME="$VERSION.tar.gz"
+
+# GITHUB DOWNLOAD URL
+URL="https://github.com/$REPO/archive/refs/tags/$VERSION.tar.gz"
+
+# Download latest release
+echo "${yellow}${bold}Downloading $FILENAME from: ${blue}$URL...${reset}"
+wget $URL -O $name-$VERSION.tar.gz
+
+# Unpack tar
+tar -C $TMP_PATH -xf $name-$VERSION.tar.gz 
+
+# Move Pick-Axe to tmp folder (and remove version number from directory name)
+mv -f $TMP_PATH/$name-$VERSION $TMP_PATH/$name 
+
+# Backup som files
+cp -f $INSTALL_PATH/$name/config.json $TMP_PATH
+cp -f $INSTALL_PATH/$name/miners.json $TMP_PATH # todo: migrate users own miner config to own json
+cp -f $INSTALL_PATH/$name/STATUS.csv $TMP_PATH
+cp -rf $INSTALL_PATH/$name/tickets/ $TMP_PATH/tickets
+
+# Delete old install (except a few paths)
+find $INSTALL_PATH/$name/* -not -name "MINERS" -not -path "$INSTALL_PATH/$name/MINERS/*" -not -name "miner.out" -delete 
+
+# Move new install into place
+cp -rf $TMP_PATH/$name/* $INSTALL_PATH/$name/
+
+# Restore backups
+cp -f $TMP_PATH/config.json $INSTALL_PATH/$name
+cp -f $TMP_PATH/miners.json $INSTALL_PATH/$name
+cp -f $TMP_PATH/STATUS.csv $INSTALL_PATH/$name
+cp -rf $TMP_PATH/tickets $INSTALL_PATH/$name/tickets
+
+# Delete tmp folder
+rm -rf $INSTALL_PATH/tmp
+
+# Give install execution permission
+chmod +x $INSTALL_PATH/$name/INSTALL 
+
+# Was it installed?
+if [ -d $INSTALL_PATH/$name ]; then
+    # Print success
+    echo "$(tput setaf 2)$NAME version 0.0.3 successfully installed! $(tput sgr0)"
+    echo "Install location: $INSTALL_PATH/$name"
+    # Delete archive
+    rm -f $name-$VERSION.tar.gz
+    # Run HELP command
+    ~/.local/bin/pick-axe/HELP
+else
+    # Print failure
+    echo "$(tput setaf 1)$NAME installation failed! $(tput sgr0)"
+    # Print suggestion
+    echo "Try unpacking the archive into $INSTALL_PATH/$name manually!"
+fi

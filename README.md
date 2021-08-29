@@ -79,7 +79,7 @@ chmod +x $INSTALL_PATH/pick-axe/INSTALL # Give install execution permission
 Now, you have two options. 
 
 ### Option 1
-You do the following, which will make *all* the commands (bash-scripts) available globally on the system.
+You do the following, which will make *all* the commands (bash-scripts) available "globally".
 As an example, the command "PICK eth", could be run from any directory.
 
  ```sh
@@ -91,7 +91,7 @@ source ~/.bashrc
 ```
 
 ### Option 2
-You do the following, which will make the commands (bash-scripts) available globally on the system,
+You do the following, which will make the commands (bash-scripts) available "globally",
 via the "pick-axe" command
 
 As an example, the command "pick-axe PICK eth", could be run from any directory.

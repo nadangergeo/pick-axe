@@ -1,5 +1,8 @@
 # How to Install OpenSSH-server (Ubuntu 20.04/21.04)
 
+Open up the terminal on the mining computer.
+
+
  ```sh
 sudo apt -y install openssh-server
 ```
@@ -30,24 +33,24 @@ We will be using nano as our text-editor
 sudo nano /etc/ssh/sshd_config
 ```
 
-Change (line 34) FROM:
-#PermitRootLogin prohibit-password
-TO:
+Change (line 34) FROM:  
+#PermitRootLogin prohibit-password  
+TO:  
 PermitRootLogin no
 
-Change line 39 FROM:
-#PubkeyAuthentication yes
-TO:
+Change line 39 FROM:  
+#PubkeyAuthentication yes  
+TO:  
 PubkeyAuthentication yes
 
-Change line 42 FROM:
-#AuthorizedKeysFile     .ssh/authorized_keys .ssh/authorized_keys2
-TO:
+Change line 42 FROM:  
+#AuthorizedKeysFile     .ssh/authorized_keys .ssh/authorized_keys2  
+TO:  
 AuthorizedKeysFile     .ssh/authorized_keys
 
-Save by pressing:
-ctrl+x
-y
+Save by pressing:  
+ctrl+x  
+y  
 ENTER
 
 Now, restart the ssh-server

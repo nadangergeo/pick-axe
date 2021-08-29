@@ -79,7 +79,20 @@
             "cuckoo29": "cuckoo29",
             "ae": "aeternity",
             "btg": "equihash144_5",
-            "btcz": "equihash144_5"
+            "btcz": "equihash144_5",
+            "tent": "equihash144_5",
+            "bze": "equihash144_5",
+            "ltz": "equihash144_5",
+            "zel": "equihash125_4",
+            "zer": "equihash192_7",
+            "safe": "equihash192_7",
+            "vdl": "equihash192_7",
+            "zerc": "equihash192_7",
+            "yec": "equihash192_7",
+            "zcl": "equihash192_7",
+            "arw": "equihash192_7",
+            "anon": "equihash192_7",
+            "aion": "equihash210_9"
         },
         "extraFlags": ""
     },

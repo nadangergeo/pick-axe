@@ -8,13 +8,13 @@
 		},
 		"pools": {
 			"ethermine": {
-				"url": "eu1.ethermine.org",
+				"host": "eu1.ethermine.org",
 				"port": "4444",
 				"scheme": "stratum+tcp",
 				"password": "x"
 			},
 			"ethermine2": {
-				"url": "eu1.ethermine.org",
+				"host": "eu1.ethermine.org",
 				"port": "14444",
 				"scheme": "stratum+tcp",
 				"password": "x"
@@ -29,7 +29,7 @@
 		},
 		"pools": {
 			"ethermine": {
-				"url": "eu1-etc.ethermine.org",
+				"host": "eu1-etc.ethermine.org",
 				"port": "4444",
 				"scheme": "stratum+tcp",
 				"password": "x"
@@ -45,7 +45,7 @@
 		},
 		"pools": {
 			"flypool": {
-				"url": "stratum-ravencoin.flypool.org",
+				"host": "stratum-ravencoin.flypool.org",
 				"port": "3333",
 				"scheme": "stratum+tcp",
 				"password": "x"
@@ -59,7 +59,7 @@
 		},
 		"pools": {
 			"flypool": {
-				"url": "eu1-beam.flypool.org",
+				"host": "eu1-beam.flypool.org",
 				"port": "3333",
 				"scheme": "stratum+tcp",
 				"password": "x"
@@ -75,7 +75,7 @@
 		},
 		"pools": {
 			"twominers": {
-				"url": "btg.2miners.com",
+				"host": "btg.2miners.com",
 				"port": "4040",
 				"scheme": "stratum+tcp",
 				"password": "x"
@@ -92,7 +92,7 @@
 		},
 		"pools": {
 			"nanopool": {
-				"url": "ergo-eu1.nanopool.org",
+				"host": "ergo-eu1.nanopool.org",
 				"port": "11111",
 				"scheme": "stratum+tcp",
 				"password": "x"
@@ -109,7 +109,7 @@
 		},
 		"pools": {
 			"darkfibermines": {
-				"url": "142.4.211.28",
+				"host": "142.4.211.28",
 				"port": "4000",
 				"scheme": "stratum+tcp",
 				"password": "x"

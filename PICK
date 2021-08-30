@@ -28,6 +28,8 @@ MINERS=`echo $MINERS_CONFIG | jq -r keys_unsorted[]` # Maintain order (for prior
 MINER="" # decided later
 
 # DEFAULT OPTIONS
+CUDA_DEVICES=""
+OPENCL_DEVICES=""
 OPT_C=`echo $CONFIG | jq -r ".defaultCoin"` # Get default from config
 OPT_W=""
 OPT_P=""
@@ -65,6 +67,8 @@ helpFunction()
 	echo -e "\t-p, --pool\t Pool (ID) to use. Key name, as configured in config.json. If not set, it will default to the first one defined for the symbol in config.json)."
 	echo -e "\t-m, --miner\t Miner to use. If not set, it will choose one that supports the coin automatically."
 	echo -e "\t-k, --keepAlive\t Keep any existing miner alive? Or automatically kill running miner first (default)?"
+	echo -e "\t-nd,--nvidia-devices\t Comma- or space-separated list of cuda devices to use (e.g 0,1,2, or 1 2 3). Will use all available gpus per default."
+	echo -e "\t-ad,--amd-devices\t Comma- or space-separated list of open cl devices to use (e.g 0,1,2 or 1 2 3). Will use all available gpus per default."
 	exit 1 # Exit script after printing help
 }
 
@@ -91,32 +95,42 @@ fi
 for arg in "$@"; do
   shift # shift params, $1 becomes $2, $2 becomse $3, etc...
   case "$arg" in
-	"--help")		set -- "$@" "-h" ;;
-	"--coin")		set -- "$@" "-c" ;;
-	"--wallet")		set -- "$@" "-w" ;;
-	"--pool")		set -- "$@" "-p" ;;
-	"--miner")		set -- "$@" "-m" ;;
-	"--keepAlive")	set -- "$@" "-k" ;;
-	*)				set -- "$@" "$arg"
+	"--help")			set -- "$@" "-h" ;;
+	"--coin")			set -- "$@" "-c" ;;
+	"--wallet")			set -- "$@" "-w" ;;
+	"--pool")			set -- "$@" "-p" ;;
+	"--miner")			set -- "$@" "-m" ;;
+	"--keepAlive")		set -- "$@" "-k" ;;
+	"--nvidia-devices")	set -- "$@" "-nd" ;;
+	"--amd-devices")	set -- "$@" "-ad" ;;
+	*)					set -- "$@" "$arg"
   esac
 done
 
-while getopts "c:w:p:h:m:k FLAG:" opt
+while getopts "c:w:p:h:m:k:nd:ad: FLAG:" opt
 do
    case "$opt" in
-	  "h") helpFunction ;; # Print helpFunction
-	  "c") OPT_C="$OPTARG" ;;
-	  "w") OPT_W="$OPTARG" ;;
-	  "p") OPT_P="$OPTARG" ;;
-	  "m") MINER="$OPTARG" ;;
-	  "k") OPT_K="true" ;;
-	  "?") helpFunction >&2; exit 1 ;;
+	  "h") 	helpFunction ;; # Print helpFunction
+	  "c") 	OPT_C="$OPTARG" ;;
+	  "w") 	OPT_W="$OPTARG" ;;
+	  "p") 	OPT_P="$OPTARG" ;;
+	  "m") 	MINER="$OPTARG" ;;
+	  "k") 	OPT_K="true" ;;
+	  "nd") CUDA_DEVICES="$OPTARG" ;;
+	  "ad") OPENCL_DEVICES="$OPTARG" ;;
+	  "?") 	helpFunction >&2; exit 1 ;;
    esac
 done
 
 # Transform coin symbol to UPPERCASE and lowercase
 COIN=`echo $OPT_C | tr '[:lower:]' '[:upper:]'`
 coin=`echo $COIN | tr '[:upper:]' '[:lower:]'` # lowercase
+
+# Convert DEVICES to comma & space separated lists
+CUDA_DEVICES_SPACE="${CUDA_DEVICES//,/$' '}"
+CUDA_DEVICES_COMMA="${CUDA_DEVICES// /$','}"
+OPENCL_DEVICES_SPACE="${OPENCL_DEVICES//,/$' '}"
+OPENCL_DEVICES_COMMA="${OPENCL_DEVICES// /$','}"
 
 # Unpack stuff from config
 WORKER=`echo $CONFIG | jq -r ".workerName"`
@@ -281,38 +295,37 @@ bash -c "$COMMAND >> miner.out 2>&1" &	#
 case $MINER in
 	"trex")
 		# SET COMMAND
-		COMMAND="$MINER_BIN $ALGO_FLAG $ALGO -o $POOL_SCHEME://$POOL_URL_PORT -u $WALLET -p $POOL_PASSWORD -w $WORKER $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
+		COMMAND="$MINER_BIN $ALGO_FLAG $ALGO -o $POOL_SCHEME://$POOL_URL_PORT -u $WALLET -p $POOL_PASSWORD -w $WORKER -d $CUDA_DEVICES_COMMA $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
 		;;
 
 	"nbminer")
 		# SET COMMAND
-		COMMAND="$MINER_BIN $ALGO_FLAG $ALGO -o $POOL_SCHEME://$POOL_URL_PORT -u $WALLET.$WORKER -p $POOL_PASSWORD $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
+		COMMAND="$MINER_BIN $ALGO_FLAG $ALGO -o $POOL_SCHEME://$POOL_URL_PORT -u $WALLET.$WORKER -p $POOL_PASSWORD -d $CUDA_DEVICES_COMMA $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
 		;;
 
 	"gminer")
 		# SET COMMAND
-		COMMAND="$MINER_BIN $ALGO_FLAG $ALGO -s $POOL_URL -n $POOL_PORT -u $WALLET.$WORKER -p $POOL_PASSWORD --worker $WORKER --pers $PERS $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
+		COMMAND="$MINER_BIN $ALGO_FLAG $ALGO -s $POOL_URL -n $POOL_PORT -u $WALLET.$WORKER -p $POOL_PASSWORD --worker $WORKER --pers $PERS -d $CUDA_DEVICES_SPACE $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
 		;;
 
 	"ethminer")
 		# SET COMMAND
-		COMMAND="$MINER_BIN -P $POOL_SCHEME://$WALLET.$WORKER:$POOL_PASSWORD@$POOL_URL:$POOL_PORT $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
+		COMMAND="$MINER_BIN -P $POOL_SCHEME://$WALLET.$WORKER:$POOL_PASSWORD@$POOL_URL:$POOL_PORT --cu-devices $CUDA_DEVICES_SPACE --cl-devices $OPENCL_DEVICES_SPACE $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
 		;;
 
 	"miniz")
 		# SET COMMAND
-		COMMAND="$MINER_BIN $ALGO_FLAG$ALGO --server $POOL_URL --port $POOL_PORT --user $WALLET --pass $POOL_PASSWORD --worker $WORKER --pers=$PERS $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
+		COMMAND="$MINER_BIN $ALGO_FLAG$ALGO --server $POOL_URL --port $POOL_PORT --user $WALLET --pass $POOL_PASSWORD --worker $WORKER --pers=$PERS -cd $CUDA_DEVICES_COMMA $EXTRA_FLAGS $COIN_EXTRA_FLAGS"
 		;;
 
 	*)
 		# Not supported by miner, print error and exit
-		# echo "Can't start! ${MINER} does not support ${COIN}." 1>&2
 		echo "Can't start! Pick-Axe does not support ${MINER}." 1>&2
 		exit 420
 		;;
 esac
 
-############# START MINING 🚀 ###########
+############ START MINING 🚀 ############
 #									    #
 # LOG COMMAND						    #
 echo $COMMAND >> miner.out			    #

@@ -51,7 +51,8 @@
 				"password": "x"
 			}
 		},
-		"icon": "🦅"
+		"icon": "🦅",
+		"extraFlags": ""
 	},
 	"BEAM": {
 		"wallets": {

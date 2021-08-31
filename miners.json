@@ -18,6 +18,7 @@
             "veil": "progpow-veil",
             "firo": "mtp"
         },
+        "cudaFlag": "-d",
         "extraFlags": "--api-bind-telnet 0 --api-bind-http 0.0.0.0:1337 --api-read-only"
     },
     "ethminer": {
@@ -33,6 +34,8 @@
         "algos": {
             "eth": ""
         },
+        "cudaFlag": "--cu-devices",
+        "openCLFlag": "--cl-devices",
         "extraFlags": ""
     },
     "nbminer": {
@@ -56,6 +59,7 @@
             "cfx": "octopus",
             "ergo": "ergo"
         },
+        "cudaFlag": "-d",
         "extraFlags": ""
     },
     "gminer": {
@@ -94,6 +98,7 @@
             "anon": "equihash192_7",
             "aion": "equihash210_9"
         },
+        "cudaFlag": "-d",
         "extraFlags": ""
     },
     "miniz": {
@@ -135,6 +140,8 @@
             "sero": "ProgPoW",
             "veil": "ProgPoW"
         },
+        "cudaFlag": "-cu",
+        "openCLFlag": "-cl",
         "extraFlags": "--smart-pers"
     }
 }

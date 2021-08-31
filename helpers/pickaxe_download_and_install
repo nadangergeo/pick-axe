@@ -20,6 +20,7 @@ reset=`tput sgr0`
 
 # Create install target if needed
 mkdir -p $INSTALL_PATH
+mkdir -p $INSTALL_PATH/$name
 
 # tmp directory if needed
 mkdir -p $TMP_PATH
@@ -48,22 +49,22 @@ tar -C $TMP_PATH -xf $name-$VERSION.tar.gz
 mv -f $TMP_PATH/$name-$VERSION $TMP_PATH/$name 
 
 # Backup som files
-cp -f $INSTALL_PATH/$name/config.json $TMP_PATH
-cp -f $INSTALL_PATH/$name/miners.json $TMP_PATH # todo: migrate users own miner config to own json
-cp -f $INSTALL_PATH/$name/STATUS.csv $TMP_PATH
-cp -rf $INSTALL_PATH/$name/tickets/ $TMP_PATH/tickets
+cp -f $INSTALL_PATH/$name/config.json $TMP_PATH 2>/dev/null
+cp -f $INSTALL_PATH/$name/miners.json $TMP_PATH 2>/dev/null # todo: migrate users own miner config to own json
+cp -f $INSTALL_PATH/$name/STATUS.csv $TMP_PATH 2>/dev/null
+cp -rf $INSTALL_PATH/$name/tickets/ $TMP_PATH/tickets 2>/dev/null
 
 # Delete old install (except a few paths)
-find $INSTALL_PATH/$name/* -not -name "MINERS" -not -path "$INSTALL_PATH/$name/MINERS/*" -not -name "miner.out" -delete 
+find $INSTALL_PATH/$name/* -not -name "MINERS" -not -path "$INSTALL_PATH/$name/MINERS/*" -not -name "miner.out" -delete 2>/dev/null
 
 # Move new install into place
 cp -rf $TMP_PATH/$name/* $INSTALL_PATH/$name/
 
 # Restore backups
-cp -f $TMP_PATH/config.json $INSTALL_PATH/$name
-cp -f $TMP_PATH/miners.json $INSTALL_PATH/$name
-cp -f $TMP_PATH/STATUS.csv $INSTALL_PATH/$name
-cp -rf $TMP_PATH/tickets $INSTALL_PATH/$name/tickets
+cp -f $TMP_PATH/config.json $INSTALL_PATH/$name 2>/dev/null
+cp -f $TMP_PATH/miners.json $INSTALL_PATH/$name 2>/dev/null
+cp -f $TMP_PATH/STATUS.csv $INSTALL_PATH/$name 2>/dev/null
+cp -rf $TMP_PATH/tickets $INSTALL_PATH/$name/tickets 2>/dev/null
 
 # Delete tmp folder
 rm -rf $INSTALL_PATH/tmp

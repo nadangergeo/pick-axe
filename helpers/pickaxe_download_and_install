@@ -75,7 +75,7 @@ chmod +x $INSTALL_PATH/$name/INSTALL
 # Was it installed?
 if [ -d $INSTALL_PATH/$name ]; then
     # Print success
-    echo "$(tput setaf 2)$NAME version 0.0.3 successfully installed! $(tput sgr0)"
+    echo "$(tput setaf 2)$NAME version $VERSION successfully installed! $(tput sgr0)"
     echo "Install location: $INSTALL_PATH/$name"
     # Delete archive
     rm -f $name-$VERSION.tar.gz

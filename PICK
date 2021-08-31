@@ -238,9 +238,9 @@ ALGO=`echo $MINER_CONFIG | jq -r ".algos" | jq -r ".$coin"`
 EXTRA_FLAGS=`echo $MINER_CONFIG | jq -r ".extraFlags"`
 MINER_NAME=`echo $MINER_CONFIG | jq -r ".name"`
 MINER_ICON=`echo $MINER_CONFIG | jq -r ".icon"`
-CUDA_FLAG=`[ "$CUDA_DEVICES" = "" ] && echo $MINER_CONFIG | jq -r ".cudaFlag"`
-OPENCL_FLAG=`[ "$OPENCL_DEVICES" = "" ] && echo $MINER_CONFIG | jq -r ".openCLFlag"`
 
+CUDA_FLAG=`[ "$CUDA_DEVICES" != "" ] && echo $MINER_CONFIG | jq -r ".cudaFlag"`
+OPENCL_FLAG=`[ "$OPENCL_DEVICES" != "" ] && echo $MINER_CONFIG | jq -r ".openCLFlag"`
 
 # ⚠️ SANITIZE INPUTS! SANITIZE'EM ALL! ANYTHING THAT TOUCHES EXECUTION! ⚠️
 

@@ -35,16 +35,20 @@ if [ "$MINER" = null ] || [ "$MINER" = "" ]; then
 
         # LOOP OVER INSTALLED MINERS AND DO ACTION
         MINERS=`./ENABLED_MINERS`
+        RESULT=""
 
         if [ "$MINERS" != "" ]; then
                 for miner in $MINERS
                 do
-                        ./SUPPORT "$miner"
+                        support=`$SCRIPTPATH/SUPPORT "$miner"`
+                        RESULT="$RESULT $support"
                 done
         fi
 
+        printf '%s\n' $RESULT | sort | uniq
         exit 1
 fi
 
 MINERS_CONFIG=`cat miners.json`
-echo $MINERS_CONFIG | jq -r .$MINER.algos  | jq -r keys_unsorted[]
+support=`echo $MINERS_CONFIG | jq -r .$MINER.algos  | jq -r keys[]`
+printf '%s\n' $support
